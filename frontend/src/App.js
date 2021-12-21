@@ -36,7 +36,9 @@ function App() {
       setSpeed(speed - 5);
     } else setSpeed(speed);
   };
-  console.log(speed);
+  // useEffect(() => {
+  //   console.log("id", idToCall);
+  // }, [idToCall]);
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })

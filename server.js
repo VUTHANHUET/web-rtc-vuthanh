@@ -4,8 +4,8 @@ const app = express();
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
-    origin: "https://web-rtc-vuthanh.surge.sh/",
-    // origin: "http://localhost:3000",
+    // origin: "https://web-rtc-vuthanh.surge.sh/" || "http://localhost:3000",
+    origin: "*",
     methods: ["GET", "POST"],
   },
 });
