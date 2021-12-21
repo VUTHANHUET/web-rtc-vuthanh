@@ -9,7 +9,8 @@ import Peer from "simple-peer";
 import io from "socket.io-client";
 import "./App.css";
 
-const socket = io.connect("http://localhost:5000");
+// const socket = io.connect("http://localhost:5000");
+const socket = io.connect("https://vuthanh-rtc-server.herokuapp.com/");
 function App() {
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
@@ -145,7 +146,7 @@ function App() {
             </div>
           </div>
         </div>
-        <div className={callAccepted && !callEnded ? "myId " : "myId d-none"}>
+        <div className={callAccepted && !callEnded ? "myId d-none" : "myId "}>
           <TextField
             id="filled-basic"
             label="Name"
@@ -190,7 +191,7 @@ function App() {
         </div>
         <div
           className={
-            callAccepted && !callEnded ? "myControl d-none" : "myControl d-flex"
+            callAccepted && !callEnded ? "myControl d-flex" : "myControl d-none"
           }
           style={{ flexDirection: "column" }}
         >
