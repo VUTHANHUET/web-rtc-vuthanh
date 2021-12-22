@@ -26,19 +26,23 @@ function App() {
   const connectionRef = useRef();
   const [speed, setSpeed] = useState(70);
 
+  // Tăng tốc độ động cơ
   const InSpeed = () => {
     if (speed < 95) {
       setSpeed(speed + 5);
     } else setSpeed(speed);
   };
+  // Giảm tốc độ động cơ
   const DeSpeed = () => {
     if (speed > 5) {
       setSpeed(speed - 5);
     } else setSpeed(speed);
   };
-  // useEffect(() => {
-  //   console.log("id", idToCall);
-  // }, [idToCall]);
+  const Controls = (role) => {
+    socket.emit("Client-send", role);
+    console.log(role);
+  };
+
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
@@ -204,17 +208,43 @@ function App() {
             ĐIỀU KHIỂN ROBOT
           </h5>
           <div className="d-flex flex-row" style={{ justifyContent: "center" }}>
-            <button className="btn btn-outline-primary ">FORWARD</button>
+            <button
+              onClick={() => Controls("U")}
+              className="btn btn-outline-primary "
+            >
+              FORWARD
+            </button>
           </div>
           <div
             className="d-flex flex-row"
             style={{ justifyContent: "space-between" }}
           >
-            <button className="btn btn-outline-primary">LEFT</button>
-            <button className="btn btn-outline-primary">RIGHT</button>
+            <button
+              onClick={() => Controls("L")}
+              className="btn btn-outline-primary"
+            >
+              LEFT
+            </button>
+            <button
+              onClick={() => Controls("S")}
+              className="btn btn-outline-danger"
+            >
+              STOP
+            </button>
+            <button
+              onClick={() => Controls("R")}
+              className="btn btn-outline-primary"
+            >
+              RIGHT
+            </button>
           </div>
           <div className="d-flex flex-row" style={{ justifyContent: "center" }}>
-            <button className="btn btn-outline-primary">BACK</button>
+            <button
+              onClick={() => Controls("B")}
+              className="btn btn-outline-primary"
+            >
+              BACK
+            </button>
           </div>
           {/* <div className="mt-5 d-block">
             <button
