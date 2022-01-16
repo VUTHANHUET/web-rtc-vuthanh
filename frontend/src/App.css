@@ -36,16 +36,27 @@
 }
 
 .caller {
+	display: flex;
+	align-content: center;
 	text-align: center;
 	color: #fff;
+	border: 2px solid rgb(39, 104, 189);
+	border-radius: 10px;
+	background-color: #fff;
+	padding: 5px;
+	width: 400px;
+}
+.caller h4 {
+	color: black;
+	margin-right: 10px;
 }
 
 body {
 	background: #4776e6; /* fallback for old browsers */
-	background: -webkit-linear-gradient(to right, #8e54e9, #4776e6); /* Chrome 10-25, Safari 5.1-6 */
+	background: -webkit-linear-gradient(to right, #2ca5ad, #4776e6); /* Chrome 10-25, Safari 5.1-6 */
 	background: linear-gradient(
 		to right,
-		#8e54e9,
+		#2ca5ad,
 		#4776e6
 	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 }
@@ -67,4 +78,42 @@ body {
 	display: grid;
 	justify-content: center;
 	align-content: center;
+}
+
+video {
+	border-radius: 10px;
+}
+.arrow-direct-img{
+	width: 50px;
+}
+
+
+
+/* video area*/
+
+.video-area{
+	display: flex;
+	flex-direction: column;
+	position: relative;
+}
+.span-name{
+	position: absolute;
+	top: 1%;
+	left: 1%;
+	font-weight: bold;
+	color: rgba(255, 0, 0, 0.842);
+	font-size: 15px;
+}
+
+/*control-tab*/
+.control-tab{
+	padding: 3px;
+	margin: 1rem
+}
+.control-tab h5{
+	margin-top: 1rem;
+}
+.btn-control:hover{
+    transform: scale(1.2,1.2);
+    transition: transform 0.3s ease;
 }

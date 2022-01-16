@@ -7,6 +7,7 @@ import React, { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import Peer from "simple-peer";
 import io from "socket.io-client";
+import ControlTab from "./ControlTab";
 import "./App.css";
 
 // const socket = io.connect("http://localhost:5000");
@@ -105,6 +106,10 @@ function App() {
     peer.signal(callerSignal);
     connectionRef.current = peer;
   };
+  const denyCall = () => {
+    setCallAccepted(false);
+    setReceivingCall(false);
+  };
 
   const leaveCall = () => {
     setCallEnded(true);
@@ -112,10 +117,10 @@ function App() {
   };
 
   return (
-    <>
-      <h1 style={{ textAlign: "center", color: "#fff" }}>
-        Phòng Zoom của Thành
-      </h1>
+    <div>
+      <h1 style={{ textAlign: "center", color: "#fff" }}>Master View</h1>
+
+      {/* button leave call */}
       {callAccepted && !callEnded ? (
         <button
           onClick={() => leaveCall()}
@@ -135,19 +140,40 @@ function App() {
                   muted
                   ref={myVideo}
                   autoPlay
-                  controls
-                  style={!callEnded ? { width: "400px" } : { width: "600px" }}
+                  // controls
+                  style={!callEnded ? { width: "800px" } : { width: "800px" }}
                 />
               )}
             </div>
+            <div>
+              {receivingCall && !callAccepted ? (
+                <div className="caller">
+                  <h4>{name} đang gọi cho bạn...</h4>
+                  <button
+                    className="btn btn-info me-3"
+                    onClick={() => answerCall()}
+                  >
+                    <b>Answer</b>
+                  </button>
+                  <button className="btn btn-danger" onClick={() => denyCall()}>
+                    <b>Deny</b>
+                  </button>
+                </div>
+              ) : null}
+            </div>
             <div className="video">
               {callAccepted && !callEnded ? (
-                <video
-                  playsInline
-                  ref={userVideo}
-                  autoPlay
-                  style={{ width: "400px" }}
-                />
+                <div className="video-area" style={{ position: "relative" }}>
+                  <span class="badge rounded-pill bg-warning text-dark span-name">
+                    {name}
+                  </span>
+                  <video
+                    playsInline
+                    ref={userVideo}
+                    autoPlay
+                    style={{ width: "800px" }}
+                  />
+                </div>
               ) : null}
             </div>
           </div>
@@ -179,11 +205,6 @@ function App() {
             onChange={(e) => setIdToCall(e.target.value)}
           />
           <div className="call-button">
-            {/* {callAccepted && !callEnded ? (
-              <Button variant="contained" color="secondary" onClick={leaveCall}>
-                End Call
-              </Button>
-            ) : ( */}
             <IconButton
               color="primary"
               aria-label="call"
@@ -191,8 +212,7 @@ function App() {
             >
               <PhoneIcon fontSize="large" />
             </IconButton>
-            {/* )} */}
-            {/* {idToCall} */}
+            {idToCall}
           </div>
         </div>
         <div
@@ -201,88 +221,10 @@ function App() {
           }
           style={{ flexDirection: "column" }}
         >
-          <h5
-            className="d-flex flex-row mb-5"
-            style={{ justifyContent: "center" }}
-          >
-            ĐIỀU KHIỂN ROBOT
-          </h5>
-          <div className="d-flex flex-row" style={{ justifyContent: "center" }}>
-            <button
-              onClick={() => Controls("U")}
-              className="btn btn-outline-primary "
-            >
-              FORWARD
-            </button>
-          </div>
-          <div
-            className="d-flex flex-row"
-            style={{ justifyContent: "space-between" }}
-          >
-            <button
-              onClick={() => Controls("L")}
-              className="btn btn-outline-primary"
-            >
-              LEFT
-            </button>
-            <button
-              onClick={() => Controls("S")}
-              className="btn btn-outline-danger"
-            >
-              STOP
-            </button>
-            <button
-              onClick={() => Controls("R")}
-              className="btn btn-outline-primary"
-            >
-              RIGHT
-            </button>
-          </div>
-          <div className="d-flex flex-row" style={{ justifyContent: "center" }}>
-            <button
-              onClick={() => Controls("B")}
-              className="btn btn-outline-primary"
-            >
-              BACK
-            </button>
-          </div>
-          {/* <div className="mt-5 d-block">
-            <button
-              className="btn btn-outline-primary mb-1"
-              onClick={() => DeSpeed()}
-            >
-              -
-            </button>
-            <div className="progress">
-              <div
-                className="progress-bar w-75"
-                role="progressbar"
-                aria-valuenow={speed}
-                aria-valuemin="0"
-                aria-valuemax="100"
-              ></div>
-            </div>
-            <button
-              className="btn btn-outline-primary mt-1"
-              onClick={() => InSpeed()}
-            >
-              +
-            </button>
-          </div> */}
-        </div>
-
-        <div>
-          {receivingCall && !callAccepted ? (
-            <div className="caller">
-              <h1>{name} is calling...</h1>
-              <Button variant="contained" color="primary" onClick={answerCall}>
-                Answer
-              </Button>
-            </div>
-          ) : null}
+          <ControlTab stream={stream} myVideo={myVideo} Controls={Controls} />
         </div>
       </div>
-    </>
+    </div>
   );
 }
 
