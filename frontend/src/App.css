@@ -1,6 +1,6 @@
 .container {
-	display: grid;
-	grid-template-columns: 7fr 3fr;
+	display: flex;
+	/* grid-template-columns: 7fr 3fr; */
 }
 
 .myId {
@@ -15,9 +15,12 @@
 	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 	padding: 2rem;
-	display: grid;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-content: center;
+	align-items: center;
+	height: 620px;
 }
 
 .call-button {
@@ -40,7 +43,7 @@
 	align-content: center;
 	text-align: center;
 	color: #fff;
-	border: 2px solid rgb(39, 104, 189);
+	border: 1px solid rgb(120, 171, 238);
 	border-radius: 10px;
 	background-color: #fff;
 	padding: 5px;
@@ -75,9 +78,12 @@ body {
 	); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
 	padding: 2rem;
-	display: grid;
+	display: flex;
+	flex-direction: column;
 	justify-content: center;
 	align-content: center;
+	align-items: center;
+	height: 620px;
 }
 
 video {
@@ -116,4 +122,15 @@ video {
 .btn-control:hover{
     transform: scale(1.2,1.2);
     transition: transform 0.3s ease;
+}
+.login{
+	align-items: center;
+	color: rgb(38, 57, 165);
+	font-weight: bold;
+	margin-left: 10px;
+}
+.top-view{
+	position: relative; 
+	top: -10px;
+	background-color: "red",
 }

@@ -5,6 +5,9 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import PhoneIcon from "@material-ui/icons/Phone";
 import React, { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 import Peer from "simple-peer";
 import io from "socket.io-client";
 import ControlTab from "./ControlTab";
@@ -26,6 +29,16 @@ function App() {
   const userVideo = useRef();
   const connectionRef = useRef();
   const [speed, setSpeed] = useState(70);
+
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+  // if (!browserSupportsSpeechRecognition) {
+  //   return null;
+  // }
 
   // Tăng tốc độ động cơ
   const InSpeed = () => {
@@ -114,12 +127,17 @@ function App() {
   const leaveCall = () => {
     setCallEnded(true);
     connectionRef.current.destroy();
+    window.location.reload();
   };
+  console.log("stream", stream);
+  console.log("callAccepted", callAccepted);
 
   return (
     <div>
-      <h1 style={{ textAlign: "center", color: "#fff" }}>Master View</h1>
-
+      <h3 style={{ textAlign: "center", color: "#fff" }}>Vũ Đình Thành</h3>
+      <h5 style={{ textAlign: "center", color: "#fff" }}>
+        GVHD: Ts.Phạm Văn Quang{" "}
+      </h5>
       {/* button leave call */}
       {callAccepted && !callEnded ? (
         <button
@@ -131,62 +149,72 @@ function App() {
       ) : null}
 
       <div className="container">
-        <div className="video-container">
+        <div className="video-container col-8">
           <div>
-            <div className="video">
-              {stream && (
+            {/* Thông báo kết nối */}
+            <div>
+              {receivingCall && !callAccepted ? (
+                <div className="caller">
+                  <h4>{name} đang yêu cầu kết nối...</h4>
+                  <button
+                    className="btn btn-info me-3"
+                    onClick={() => answerCall()}
+                  >
+                    <b>Đồng ý</b>
+                  </button>
+                  <button className="btn btn-danger" onClick={() => denyCall()}>
+                    <b>Từ chối</b>
+                  </button>
+                </div>
+              ) : null}
+            </div>
+            <div>
+              <div className="video-area">
+                <span class="badge rounded-pill bg-warning text-dark span-name">
+                  {callAccepted ? "Master View" : "My View"}
+                </span>
                 <video
                   playsInline
                   muted
                   ref={myVideo}
                   autoPlay
-                  // controls
-                  style={!callEnded ? { width: "800px" } : { width: "800px" }}
+                  style={{ width: "800px", height: "600px" }}
                 />
-              )}
-            </div>
-            <div>
-              {receivingCall && !callAccepted ? (
-                <div className="caller">
-                  <h4>{name} đang gọi cho bạn...</h4>
-                  <button
-                    className="btn btn-info me-3"
-                    onClick={() => answerCall()}
-                  >
-                    <b>Answer</b>
-                  </button>
-                  <button className="btn btn-danger" onClick={() => denyCall()}>
-                    <b>Deny</b>
-                  </button>
-                </div>
-              ) : null}
-            </div>
-            <div className="video">
-              {callAccepted && !callEnded ? (
-                <div className="video-area" style={{ position: "relative" }}>
+              </div>
+              {callAccepted && (
+                <div
+                  className="video-area"
+                  style={{ position: "relative", top: "-37em", right: "-32em" }}
+                >
                   <span class="badge rounded-pill bg-warning text-dark span-name">
-                    {name}
+                    My View
                   </span>
                   <video
                     playsInline
+                    muted
                     ref={userVideo}
                     autoPlay
-                    style={{ width: "800px" }}
+                    style={{ width: "200px", height: "150px" }}
                   />
                 </div>
-              ) : null}
+              )}
             </div>
           </div>
         </div>
-        <div className={callAccepted && !callEnded ? "myId d-none" : "myId "}>
-          <TextField
-            id="filled-basic"
-            label="Name"
-            variant="filled"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            style={{ marginBottom: "20px" }}
+        <div
+          className={
+            callAccepted && !callEnded ? "myId d-none col-4" : "myId col-4"
+          }
+        >
+          <img
+            style={{
+              width: "120px",
+              height: "120px",
+            }}
+            src="https://upload.wikimedia.org/wikipedia/vi/thumb/b/bf/Logo_HUET.svg/1200px-Logo_HUET.svg.png"
+            alt=""
           />
+          <h2 className="login mb-5">Đăng Nhập</h2>
           <CopyToClipboard text={me} style={{ marginBottom: "2rem" }}>
             <Button
               variant="contained"
@@ -196,6 +224,14 @@ function App() {
               Copy ID
             </Button>
           </CopyToClipboard>
+          <TextField
+            id="filled-basic"
+            label="Name"
+            variant="filled"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            style={{ marginBottom: "20px" }}
+          />
 
           <TextField
             id="filled-basic"
@@ -212,16 +248,22 @@ function App() {
             >
               <PhoneIcon fontSize="large" />
             </IconButton>
-            {idToCall}
           </div>
         </div>
         <div
           className={
-            callAccepted && !callEnded ? "myControl d-flex" : "myControl d-none"
+            callAccepted && !callEnded
+              ? "myControl d-flex col-4"
+              : "myControl d-none col-4"
           }
           style={{ flexDirection: "column" }}
         >
-          <ControlTab stream={stream} myVideo={myVideo} Controls={Controls} />
+          <ControlTab
+            stream={stream}
+            myVideo={myVideo}
+            Controls={Controls}
+            name={name}
+          />
         </div>
       </div>
     </div>

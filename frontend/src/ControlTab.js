@@ -1,26 +1,66 @@
 import React from "react";
+import SpeechRecognition, {
+  useSpeechRecognition,
+} from "react-speech-recognition";
 
-function ControlTab({ Controls, stream, myVideo }) {
+function ControlTab({ Controls, stream, myVideo, name }) {
+  const commands = [
+    {
+      command: "reset",
+      callback: ({ resetTranscript }) => resetTranscript(),
+    },
+    {
+      command: "open",
+      callback: (site) => {
+        window.open("http://" + site);
+      },
+    },
+    {
+      command: "change background color to",
+      callback: (color) => {
+        document.body.style.background = color;
+      },
+    },
+  ];
+  const {
+    transcript,
+    listening,
+    resetTranscript,
+    browserSupportsSpeechRecognition,
+  } = useSpeechRecognition();
+  if (!browserSupportsSpeechRecognition) {
+    return <span>Browser doesn't support speech recognition.</span>;
+  }
+  // const { transcript, resetTranscript } = useSpeechRecognition({ commands });
+  // if (!SpeechRecognition.browserSupportsSpeechRecognition()) {
+  //   return null;
+  // }
+
   return (
-    <div className="control-tab">
-      <div className="video">
+    <div className="control-tab mb-3">
+      {/* <div className="video">
         {stream && (
           <div className="video-area">
             <span class="badge rounded-pill bg-warning text-dark span-name">
-              Controller
+              My View
             </span>
-            <video
-              playsInline
-              muted
-              ref={myVideo}
-              autoPlay
-              // controls
-              style={{ width: "300px" }}
-            />
+            <video muted ref={myVideo} autoPlay style={{ width: "300px" }} />
           </div>
         )}
-      </div>
-      <h5 className="d-flex flex-row mb-5" style={{ justifyContent: "center" }}>
+      </div> */}
+      <img
+        style={{
+          width: "120px",
+          height: "120px",
+          marginLeft: "50px",
+        }}
+        src="https://upload.wikimedia.org/wikipedia/vi/thumb/b/bf/Logo_HUET.svg/1200px-Logo_HUET.svg.png"
+        alt=""
+      />
+      <h5
+        className="d-flex flex-row mb-5 login"
+        style={{ justifyContent: "center" }}
+      >
         ĐIỀU KHIỂN ROBOT
       </h5>
       <div
@@ -28,12 +68,12 @@ function ControlTab({ Controls, stream, myVideo }) {
         style={{ justifyContent: "center" }}
       >
         <button
-          //   onClick={() => Controls("U")}
+          onClick={() => Controls("U")}
           className="btn btn-outline-primary btn-control"
         >
           <img
             className="arrow-direct-img"
-            src="https://cdn-icons.flaticon.com/png/512/2267/premium/2267904.png?token=exp=1642359001~hmac=a77aaa20fd123048761ac2e3e38af958"
+            src="https://cdn-icons-png.flaticon.com/512/892/892681.png"
             alt="forward"
           />
         </button>
@@ -43,19 +83,16 @@ function ControlTab({ Controls, stream, myVideo }) {
         style={{ justifyContent: "space-between" }}
       >
         <button
-          //   onClick={() => Controls("L")}
+          onClick={() => Controls("L")}
           className="btn btn-outline-primary btn-control"
         >
           <img
             className="arrow-direct-img"
-            src="https://cdn-icons.flaticon.com/png/512/2267/premium/2267909.png?token=exp=1642359347~hmac=c81100b0aa89df7ecce18fc3b5cfddcf"
+            src="https://cdn-icons-png.flaticon.com/512/6364/6364318.png"
             alt="left"
           />
         </button>
-        <button
-          //   onClick={() => Controls("S")}
-          className="btn btn-danger btn-control"
-        >
+        <button className="btn btn-danger btn-control">
           <img
             className="arrow-direct-img"
             src="https://cdn-icons-png.flaticon.com/512/827/827428.png"
@@ -63,12 +100,12 @@ function ControlTab({ Controls, stream, myVideo }) {
           />
         </button>
         <button
-          //   onClick={() => Controls("R")}
+          onClick={() => Controls("R")}
           className="btn btn-outline-primary btn-control"
         >
           <img
             className="arrow-direct-img"
-            src="https://cdn-icons.flaticon.com/png/512/2267/premium/2267911.png?token=exp=1642359266~hmac=b083425c65935de6ae6f270b58e5a36d"
+            src="https://cdn-icons-png.flaticon.com/512/892/892653.png"
             alt="right"
           />
         </button>
@@ -78,39 +115,19 @@ function ControlTab({ Controls, stream, myVideo }) {
         style={{ justifyContent: "center" }}
       >
         <button
-          //   onClick={() => Controls("B")}
+          onClick={() => {
+            Controls("B");
+            console.log("B");
+          }}
           className="btn btn-outline-primary btn-control"
         >
           <img
             className="arrow-direct-img"
-            src="https://cdn-icons.flaticon.com/png/128/2267/premium/2267906.png?token=exp=1642359259~hmac=f46847110e7dac2cfe5e423d99b6d87f"
+            src="https://cdn-icons-png.flaticon.com/512/892/892623.png"
             alt="back"
           />
         </button>
       </div>
-      {/* <div className="mt-5 d-block">
-            <button
-              className="btn btn-outline-primary mb-1"
-              onClick={() => DeSpeed()}
-            >
-              -
-            </button>
-            <div className="progress">
-              <div
-                className="progress-bar w-75"
-                role="progressbar"
-                aria-valuenow={speed}
-                aria-valuemin="0"
-                aria-valuemax="100"
-              ></div>
-            </div>
-            <button
-              className="btn btn-outline-primary mt-1"
-              onClick={() => InSpeed()}
-            >
-              +
-            </button>
-          </div> */}
     </div>
   );
 }
