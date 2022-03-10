@@ -30,9 +30,11 @@ io.on("connection", (socket) => {
     io.to(data.to).emit("callAccepted", data.signal);
   });
   socket.on("Client-send", (data) => {
-    console.log(data); //data= U,D,L,R,S  
-    io.broadcast.emit("Server-send", data);
+    console.log("Server vưa nhan duoc " + data); //data= U,D,L,R,S
+    io.sockets.emit("Server-send", data);
+    console.log("Server vừa gửi" + data);
   });
+  socket.emit("Client-send", socket.id);
 });
 
 server.listen(PORT, () => console.log(`Our app is running on port ${PORT}`));

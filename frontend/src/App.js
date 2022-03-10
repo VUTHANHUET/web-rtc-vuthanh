@@ -56,7 +56,7 @@ function App() {
     socket.emit("Client-send", role);
     console.log(role);
   };
-
+  // yêu cầu quyền truy cập vào cam và mic
   useEffect(() => {
     navigator.mediaDevices
       .getUserMedia({ video: true, audio: true })
@@ -134,7 +134,7 @@ function App() {
 
   return (
     <div>
-      <h3 style={{ textAlign: "center", color: "#fff" }}>Vũ Đình Thành</h3>
+      <h3 style={{ textAlign: "center", color: "#fff" }}>SV. Vũ Đình Thành</h3>
       <h5 style={{ textAlign: "center", color: "#fff" }}>
         GVHD: Ts.Phạm Văn Quang{" "}
       </h5>
