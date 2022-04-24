@@ -28,12 +28,11 @@ client.on("connect", function () {
 });
 
 io.on("connection", (socket) => {
+  socket.emit("me", socket.id);
   client.on("message", function (topic, message) {
     console.log(message.toString());
-    socket.emit("temp", message);
+    socket.emit("temp".message.toString());
   });
-
-  socket.emit("me", socket.id);
 
   socket.on("disconnect", () => {
     socket.broadcast.emit("callEnded");

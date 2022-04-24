@@ -30,6 +30,7 @@ function App() {
   const userVideo = useRef();
   const connectionRef = useRef();
   const [speed, setSpeed] = useState(70);
+  const [temp, setTemp] = useState("Haven't Temp");
   const [open, setOpen] = React.useState(false);
 
   const {
@@ -79,8 +80,9 @@ function App() {
     });
   }, []);
   useEffect(() => {
-    socket.on("temp", (temp) => {
-      console.log(temp);
+    socket.on("temp", (temperature) => {
+      console.log(temperature);
+      setTemp(temperature);
     });
   });
 
@@ -260,6 +262,7 @@ function App() {
             >
               <PhoneIcon fontSize="large" />
             </IconButton>
+            {temp}
           </div>
         </div>
         <div
