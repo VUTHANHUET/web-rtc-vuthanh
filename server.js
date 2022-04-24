@@ -1,6 +1,7 @@
 const express = require("express");
 const http = require("http");
 const app = express();
+const mqtt = require("mqtt");
 const server = http.createServer(app);
 const io = require("socket.io")(server, {
   cors: {
@@ -10,8 +11,28 @@ const io = require("socket.io")(server, {
   },
 });
 const PORT = process.env.PORT || 5000;
+var client = mqtt.connect("mqtt://broker.mqttdashboard.com");
+// client.on("connect", () => {
+//   setInterval(() => {
+//     var random = Math.random() * 50;
+//     console.log(random);
+//     if (random < 30) {
+//       client.publish("room/lamp", "on" + random.toString()) + '.';
+//     }
+//   }),30000;
+// });
+
+client.on("connect", function () {
+  client.subscribe("room/lamp");
+  console.log("Client has subscribed successfully");
+});
 
 io.on("connection", (socket) => {
+  client.on("message", function (topic, message) {
+    console.log(message.toString());
+    socket.emit("temp", message);
+  });
+
   socket.emit("me", socket.id);
 
   socket.on("disconnect", () => {

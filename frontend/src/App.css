@@ -39,7 +39,11 @@
 }
 
 .caller {
+	position: absolute;
+	top: 300px;
+	left: 500px;
 	display: flex;
+	flex-direction: column;
 	align-content: center;
 	text-align: center;
 	color: #fff;
@@ -48,6 +52,7 @@
 	background-color: #fff;
 	padding: 5px;
 	width: 400px;
+	height: fit-content;
 }
 .caller h4 {
 	color: black;

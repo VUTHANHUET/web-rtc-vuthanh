@@ -3,6 +3,7 @@ import IconButton from "@material-ui/core/IconButton";
 import TextField from "@material-ui/core/TextField";
 import AssignmentIcon from "@material-ui/icons/Assignment";
 import PhoneIcon from "@material-ui/icons/Phone";
+
 import React, { useEffect, useRef, useState } from "react";
 import { CopyToClipboard } from "react-copy-to-clipboard";
 import SpeechRecognition, {
@@ -29,6 +30,7 @@ function App() {
   const userVideo = useRef();
   const connectionRef = useRef();
   const [speed, setSpeed] = useState(70);
+  const [open, setOpen] = React.useState(false);
 
   const {
     transcript,
@@ -76,6 +78,11 @@ function App() {
       setCallerSignal(data.signal);
     });
   }, []);
+  useEffect(() => {
+    socket.on("temp", (temp) => {
+      console.log(temp);
+    });
+  });
 
   const callUser = (id) => {
     const peer = new Peer({
@@ -136,7 +143,7 @@ function App() {
     <div>
       <h3 style={{ textAlign: "center", color: "#fff" }}>SV. Vũ Đình Thành</h3>
       <h5 style={{ textAlign: "center", color: "#fff" }}>
-        GVHD: Ts.Phạm Văn Quang{" "}
+        GVHD: Ts.Phạm Đức Quang{" "}
       </h5>
       {/* button leave call */}
       {callAccepted && !callEnded ? (
@@ -151,11 +158,47 @@ function App() {
       <div className="container">
         <div className="video-container col-8">
           <div>
-            {/* Thông báo kết nối */}
             <div>
-              {receivingCall && !callAccepted ? (
-                <div className="caller">
-                  <h4>{name} đang yêu cầu kết nối...</h4>
+              <div
+                className={callAccepted ? "video-area" : "video-area d-none"}
+              >
+                <span class="badge rounded-pill bg-warning text-dark span-name">
+                  My View
+                </span>
+                <video
+                  playsInline
+                  muted
+                  ref={userVideo}
+                  autoPlay
+                  style={{ width: "800px", height: "600px" }}
+                />
+              </div>
+              <div
+                className="video-area"
+                style={
+                  callAccepted
+                    ? {
+                        position: "relative",
+                        top: "-37em",
+                        right: "-32em",
+                        width: "200px",
+                        height: "150px",
+                      }
+                    : { width: "800px", height: "600px" }
+                }
+              >
+                <span class="badge rounded-pill bg-warning text-dark span-name">
+                  {callAccepted ? "User View" : "My View"}
+                </span>
+                <video playsInline muted ref={myVideo} autoPlay />
+              </div>
+            </div>
+            {/* Thông báo kết nối */}
+
+            {receivingCall && !callAccepted ? (
+              <div className="caller">
+                <h4>{name} đang yêu cầu kết nối...</h4>
+                <div>
                   <button
                     className="btn btn-info me-3"
                     onClick={() => answerCall()}
@@ -166,39 +209,8 @@ function App() {
                     <b>Từ chối</b>
                   </button>
                 </div>
-              ) : null}
-            </div>
-            <div>
-              <div className="video-area">
-                <span class="badge rounded-pill bg-warning text-dark span-name">
-                  {callAccepted ? "Master View" : "My View"}
-                </span>
-                <video
-                  playsInline
-                  muted
-                  ref={myVideo}
-                  autoPlay
-                  style={{ width: "800px", height: "600px" }}
-                />
               </div>
-              {callAccepted && (
-                <div
-                  className="video-area"
-                  style={{ position: "relative", top: "-37em", right: "-32em" }}
-                >
-                  <span class="badge rounded-pill bg-warning text-dark span-name">
-                    My View
-                  </span>
-                  <video
-                    playsInline
-                    muted
-                    ref={userVideo}
-                    autoPlay
-                    style={{ width: "200px", height: "150px" }}
-                  />
-                </div>
-              )}
-            </div>
+            ) : null}
           </div>
         </div>
         <div

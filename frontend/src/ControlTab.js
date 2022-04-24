@@ -52,7 +52,7 @@ function ControlTab({ Controls, stream, myVideo, name }) {
         style={{
           width: "120px",
           height: "120px",
-          marginLeft: "50px",
+          marginLeft: "70px",
         }}
         src="https://upload.wikimedia.org/wikipedia/vi/thumb/b/bf/Logo_HUET.svg/1200px-Logo_HUET.svg.png"
         alt=""
@@ -67,6 +67,16 @@ function ControlTab({ Controls, stream, myVideo, name }) {
         className="d-flex flex-row mb-4"
         style={{ justifyContent: "center" }}
       >
+        {/* <button
+          onClick={() => Controls("U")}
+          className="btn btn-outline-primary btn-control"
+        >
+          <img
+            className="arrow-direct-img"
+            src="https://cdn-icons.flaticon.com/png/512/5548/premium/5548780.png?token=exp=1649705098~hmac=0eb822fd961c52faaa97872f73707992"
+            alt="upleft"
+          />
+        </button> */}
         <button
           onClick={() => Controls("U")}
           className="btn btn-outline-primary btn-control"
@@ -77,14 +87,21 @@ function ControlTab({ Controls, stream, myVideo, name }) {
             alt="forward"
           />
         </button>
+        {/* <button
+          onClick={() => Controls("U")}
+          className="btn btn-outline-primary btn-control"
+        >
+          <img
+            className="arrow-direct-img"
+            src="https://cdn-icons.flaticon.com/png/512/5548/premium/5548768.png?token=exp=1649705125~hmac=d7a695dbe10c77453be902f372004abb"
+            alt="upright"
+          />
+        </button> */}
       </div>
-      <div
-        className="d-flex flex-row"
-        style={{ justifyContent: "space-between" }}
-      >
+      <div className="d-flex flex-row" style={{ justifyContent: "center" }}>
         <button
           onClick={() => Controls("L")}
-          className="btn btn-outline-primary btn-control"
+          className="btn btn-outline-primary btn-control me-3"
         >
           <img
             className="arrow-direct-img"
@@ -101,7 +118,7 @@ function ControlTab({ Controls, stream, myVideo, name }) {
         </button>
         <button
           onClick={() => Controls("R")}
-          className="btn btn-outline-primary btn-control"
+          className="btn btn-outline-primary btn-control ms-3"
         >
           <img
             className="arrow-direct-img"
@@ -114,6 +131,16 @@ function ControlTab({ Controls, stream, myVideo, name }) {
         className="d-flex flex-row mt-4"
         style={{ justifyContent: "center" }}
       >
+        {/* <button
+          onClick={() => Controls("U")}
+          className="btn btn-outline-primary btn-control"
+        >
+          <img
+            className="arrow-direct-img"
+            src="https://cdn-icons.flaticon.com/png/512/5548/premium/5548803.png?token=exp=1649705117~hmac=eb72a8a4629388b8d9d46213a33881bb"
+            alt="downleft"
+          />
+        </button> */}
         <button
           onClick={() => {
             Controls("B");
@@ -127,6 +154,16 @@ function ControlTab({ Controls, stream, myVideo, name }) {
             alt="back"
           />
         </button>
+        {/* <button
+          onClick={() => Controls("U")}
+          className="btn btn-outline-primary btn-control"
+        >
+          <img
+            className="arrow-direct-img"
+            src="https://cdn-icons.flaticon.com/png/512/5548/premium/5548789.png?token=exp=1649705116~hmac=982587190e3ff8c01361473172e5a068"
+            alt="downright"
+          />
+        </button> */}
       </div>
     </div>
   );
