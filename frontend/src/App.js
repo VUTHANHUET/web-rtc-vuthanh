@@ -5,10 +5,9 @@ import AssignmentIcon from "@material-ui/icons/Assignment";
 import PhoneIcon from "@material-ui/icons/Phone";
 
 import React, { useEffect, useRef, useState } from "react";
+import { Connector } from "mqtt-react-hooks";
+import Status from "./Status";
 import { CopyToClipboard } from "react-copy-to-clipboard";
-import SpeechRecognition, {
-  useSpeechRecognition,
-} from "react-speech-recognition";
 import Peer from "simple-peer";
 import io from "socket.io-client";
 import ControlTab from "./ControlTab";
@@ -16,6 +15,8 @@ import "./App.css";
 
 // const socket = io.connect("http://localhost:5000");
 const socket = io.connect("https://vuthanh-rtc-server.herokuapp.com/");
+// const socket = io.connect("http://192.168.1.22:5000/");
+
 function App() {
   const [me, setMe] = useState("");
   const [stream, setStream] = useState();
@@ -29,35 +30,10 @@ function App() {
   const myVideo = useRef();
   const userVideo = useRef();
   const connectionRef = useRef();
-  const [speed, setSpeed] = useState(70);
-  const [temp, setTemp] = useState("Haven't Temp");
-  const [open, setOpen] = React.useState(false);
-
-  const {
-    transcript,
-    listening,
-    resetTranscript,
-    browserSupportsSpeechRecognition,
-  } = useSpeechRecognition();
-  // if (!browserSupportsSpeechRecognition) {
-  //   return null;
-  // }
-
-  // Tăng tốc độ động cơ
-  const InSpeed = () => {
-    if (speed < 95) {
-      setSpeed(speed + 5);
-    } else setSpeed(speed);
-  };
-  // Giảm tốc độ động cơ
-  const DeSpeed = () => {
-    if (speed > 5) {
-      setSpeed(speed - 5);
-    } else setSpeed(speed);
-  };
+  const [he, setHe] = useState(0);
+  const [sp, setSp] = useState(0);
   const Controls = (role) => {
-    socket.emit("Client-send", role);
-    console.log(role);
+    socket.emit("Client-send-control", role);
   };
   // yêu cầu quyền truy cập vào cam và mic
   useEffect(() => {
@@ -80,11 +56,14 @@ function App() {
     });
   }, []);
   useEffect(() => {
-    socket.on("temp", (temperature) => {
-      console.log(temperature);
-      setTemp(temperature);
+    socket.on("Server-send-he", (he) => {
+      setHe(he.toString());
+      // console.log("11", temp);
     });
-  });
+    socket.on("Server-send-sp", (sp) => {
+      setSp(sp.toString());
+    });
+  }, [he, sp]);
 
   const callUser = (id) => {
     const peer = new Peer({
@@ -138,8 +117,6 @@ function App() {
     connectionRef.current.destroy();
     window.location.reload();
   };
-  console.log("stream", stream);
-  console.log("callAccepted", callAccepted);
 
   return (
     <div>
@@ -262,8 +239,10 @@ function App() {
             >
               <PhoneIcon fontSize="large" />
             </IconButton>
-            {temp}
           </div>
+          {/* {he}
+          <br></br>
+          {sp} */}
         </div>
         <div
           className={
@@ -274,6 +253,8 @@ function App() {
           style={{ flexDirection: "column" }}
         >
           <ControlTab
+            spo2={sp}
+            heartrate={he}
             stream={stream}
             myVideo={myVideo}
             Controls={Controls}
